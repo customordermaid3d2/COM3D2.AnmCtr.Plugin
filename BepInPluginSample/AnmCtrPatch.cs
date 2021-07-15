@@ -4,15 +4,17 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using UnityEngine;
 
 namespace COM3D2.AnmCtr.Plugin
 {
     class AnmCtrPatch
     {
-        
-        public static Maid[] maids=new Maid[18];
-        public static string[] maidNames=new string[18];
-        public static string[] motionTags=new string[18];
+
+        public static Maid[] maids = new Maid[18];
+        public static string[] maidNames = new string[18];
+        public static string[] motionTags = new string[18];
+        //public static AnimationClip[] animationClips = new AnimationClip[18];
 
         /// <summary>
         /// 메이드가 슬롯에 넣었을때 
@@ -29,7 +31,7 @@ namespace COM3D2.AnmCtr.Plugin
             {
                 // maids 의 위치랑 maidNames 의 위치가 같게끔 설정한거
                 maids[f_nActiveSlotNo] = f_maid; // 내가 만든 메이드 목록중 해당 번호 슬롯에 메이드를 저장
-                maidNames[f_nActiveSlotNo] = f_maid.status.fullNameEnStyle;                
+                maidNames[f_nActiveSlotNo] = f_maid.status.fullNameEnStyle;
             }
             MyLog.LogMessage("CharacterMgr.SetActive", f_nActiveSlotNo, f_bMan, f_maid.status.fullNameEnStyle);
         }
@@ -50,6 +52,45 @@ namespace COM3D2.AnmCtr.Plugin
                 motionTags[f_nActiveSlotNo] = null;
             }
             MyLog.LogMessage("CharacterMgr.Deactivate", f_nActiveSlotNo, f_bMan);
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(TBody), "CrossFade", typeof(string), typeof(AFileSystemBase), typeof(bool), typeof(bool), typeof(bool), typeof(float), typeof(float))]
+        public static void CrossFade(TBody __instance, string filename, AFileSystemBase fileSystem, bool additive = false, bool loop = false, bool boAddQue = false, float fade = 0.5f, float weight = 1f)
+        {
+            //if (config["CrossFade", false])
+            MyLog.LogMessage("TBody.CrossFade1"
+            , filename
+            , additive
+            , loop
+            , boAddQue
+            , fade
+            , weight
+            );
+            int i = maids.ToList().IndexOf(__instance.maid);
+            if (i >= 0)
+            {
+                motionTags[i] = filename;
+            }
+
+        }
+
+        [HarmonyPostfix, HarmonyPatch(typeof(TBody), "CrossFade", typeof(string), typeof(byte[]), typeof(bool), typeof(bool), typeof(bool), typeof(float), typeof(float))]
+        public static void CrossFade(TBody __instance, string tag, byte[] byte_data, bool additive = false, bool loop = false, bool boAddQue = false, float fade = 0.5f, float weight = 1f)
+        {
+            //if (config["CrossFade", false])
+            MyLog.LogMessage("TBody.CrossFade2"
+            , tag
+            , additive
+            , loop
+            , boAddQue
+            , fade
+            , weight
+            );
+            int i = maids.ToList().IndexOf(__instance.maid);
+            if (i >= 0)
+            {
+                motionTags[i] = tag;
+            }
         }
     }
 }

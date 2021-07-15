@@ -54,22 +54,7 @@ namespace COM3D2.AnmCtr.Plugin
 
         internal static void TimeRnd(int seleted)
         {
-			var maid = AnmCtrPatch.maids[seleted];
-			if (maid == null)
-			{
-				return;
-			}
-			// AnmCtrPatch.maids[seleted].GetAnimation().Play();
-			// AnmCtrPatch.motionNames[seleted] = fileName;
-			var tag = AnmCtrPatch.motionTags[seleted];
-            if (tag==null)
-            {
-				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
-				, "nm null"
-				);
-				return;
-            }
-			var anm= maid.GetAnimation()[tag];
+			AnimationState anm = GetAnm(seleted);
 			if (anm == null)
 			{
 				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
@@ -79,5 +64,99 @@ namespace COM3D2.AnmCtr.Plugin
 			}
 			anm.time = UnityEngine.Random.Range(0, anm.length);
 		}
-    }
+
+		internal static void TimeReset(int seleted)
+		{
+			AnimationState anm = GetAnm(seleted);
+			if (anm == null)
+			{
+				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
+				, "anm null"
+				);
+				return;
+			}
+			anm.time = 0;
+		}
+
+		internal static AnimationState GetAnm(int seleted)
+        {
+			var maid = AnmCtrPatch.maids[seleted];
+			if (maid == null)
+			{
+				return null;
+			}
+			// AnmCtrPatch.maids[seleted].GetAnimation().Play();
+			// AnmCtrPatch.motionNames[seleted] = fileName;
+			var tag = AnmCtrPatch.motionTags[seleted];
+			if (tag == null)
+			{
+				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
+				, "nm null"
+				);
+				return null;
+			}
+			AnimationState anm = maid.GetAnimation()[tag];
+			if (anm == null)
+			{
+				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
+				, "anm null"
+				);
+				return null;
+			}
+			return anm;
+		}
+
+
+
+
+
+		internal static void seletedCopy(int seleted)
+		{
+			//AnimationClip clip = animation.GetClip(tag);
+			AnimationState anm = GetAnm(seleted);
+			if (anm == null)
+			{
+				MyLog.LogMessage("AnmCtrUtill.seletedCopy"
+				, "anm null"
+				);
+				return;
+			}
+			//AnmCtrPatch.motionTags[seleted];
+
+			Animation animation = AnmCtrPatch.maids[seleted].GetAnimation();
+			AnimationClip clip = animation.GetClip(AnmCtrPatch.motionTags[seleted]);
+			Maid maid;
+			var tag = AnmCtrPatch.motionTags[seleted];
+
+			for (int i = 0; i < 18; i++)
+			{
+				maid = AnmCtrPatch.maids[i];
+				if (maid == null)
+				{
+					continue;
+				}
+				animation = maid.GetAnimation();
+				if (animation == null)
+				{
+					continue;
+				}
+				//AnimationClip clip = animation.GetClip(tag);
+				animation.AddClip(clip, tag);
+				animation.Play();
+				anm = animation[tag];
+				anm.blendMode = AnimationBlendMode.Blend;
+				anm.wrapMode = WrapMode.Loop;
+				anm.speed = 1f;
+				anm.time = 0f;
+				anm.weight = 0f;
+				anm.enabled = true;
+				MyLog.LogMessage("AnmCtrUtill.seletedCopy"
+				, maid.status.fullNameEnStyle
+				);
+			}
+
+		}
+
+
+	}
 }

@@ -39,11 +39,17 @@ namespace COM3D2.AnmCtr.Plugin
 
         // GUI ON OFF 설정파일로 저장
         private static ConfigEntry<bool> IsGUIOn;
+        private static ConfigEntry<int> option;
 
         public static bool isGUIOn
         {
             get => IsGUIOn.Value;
             set => IsGUIOn.Value = value;
+        }
+
+        public int Option { 
+            get => option.Value; 
+            set => option.Value = value; 
         }
 
         public static System.Windows.Forms.OpenFileDialog openDialog;
@@ -53,7 +59,7 @@ namespace COM3D2.AnmCtr.Plugin
 
 
         private int seleted;
-        private int all;
+
 
 
         /// <summary>
@@ -85,19 +91,21 @@ namespace COM3D2.AnmCtr.Plugin
 
             myWindowRect = new MyWindowRect(config, MyAttribute.PLAGIN_FULL_NAME);
             IsGUIOn = config.Bind("GUI", "isGUIOn", false); // 이건 베핀 설정값 지정용
+            option = config.Bind("GUI", "all", 0); // 이건 베핀 설정값 지정용
             // 이건 단축키
             ShowCounter = config.Bind("GUI", "isGUIOnKey", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha3, KeyCode.LeftControl));
-           
+
             // 이건 기어메뉴 아이콘
             SystemShortcutAPI.AddButton(
                 MyAttribute.PLAGIN_FULL_NAME
-                , new Action(delegate () { // 기어메뉴 아이콘 클릭시 작동할 기능
-                    AnmCtrGUI.isGUIOn = !AnmCtrGUI.isGUIOn; 
+                , new Action(delegate ()
+                { // 기어메뉴 아이콘 클릭시 작동할 기능
+                    AnmCtrGUI.isGUIOn = !AnmCtrGUI.isGUIOn;
                 })
                 , MyAttribute.PLAGIN_NAME + " : " + ShowCounter.Value.ToString() // 표시될 툴팁 내용
-                // 표시될 아이콘
+                                                                                 // 표시될 아이콘
                 , MyUtill.ExtractResource(COM3D2.AnmCtr.Plugin.Properties.Resources.icon));
-                // 아이콘은 이렇게 추가함
+            // 아이콘은 이렇게 추가함
 
             // 파일 열기창 설정 부분. 이런건 구글링 하기
             openDialog = new System.Windows.Forms.OpenFileDialog()
@@ -151,7 +159,7 @@ namespace COM3D2.AnmCtr.Plugin
             if (ShowCounter.Value.IsUp())// 단축키가 일치할때
             {
                 isGUIOn = !isGUIOn;// 보이거나 안보이게. 이런 배열이였네 지웠음
-                MyLog.LogMessage("IsUp",  ShowCounter.Value.MainKey);
+                MyLog.LogMessage("IsUp", ShowCounter.Value.MainKey);
             }
         }
 
@@ -204,24 +212,20 @@ namespace COM3D2.AnmCtr.Plugin
                 {
                     GUILayout.Label("maid null");
                 }
+
+                GUILayout.Label("file set");
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("load"))
                 {
                     if (openDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)// 오픈했을때
                     {
                         byte[] array = AnmCtrUtill.Load(openDialog.FileName);
-                        if (all == 0)
-                        {
-                            AnmCtrUtill.Load(seleted, openDialog.FileName, array);
-                        }
-                        else
-                        {
-                            for (int i = 0; i < 18; i++)
-                            {
-                                AnmCtrUtill.Load(i, openDialog.FileName, array);
-                            }
-                        }
+                        seletedRun(AnmCtrUtill.Load, openDialog.FileName, array);
                     }
+                }
+                if (GUILayout.Button("Copy All"))
+                {
+                    AnmCtrUtill.seletedCopy(seleted);
                 }
                 /*
                 if (GUILayout.Button("save"))
@@ -243,31 +247,35 @@ namespace COM3D2.AnmCtr.Plugin
                     }
                 }
                 */
-                if (GUILayout.Button("Time Rnd"))
-                {
-                    if (all == 0)
-                    {
-                        AnmCtrUtill.TimeRnd(seleted);
-                    }
-                    else
-                    {
-                        for (int i = 0; i < 18; i++)
-                        {
-                            AnmCtrUtill.TimeRnd(i);
-                        }
-                    }
-                }
-                
                 GUILayout.EndHorizontal();
 
-                GUI.enabled = true;
+                {
+                    GUILayout.Label("Time");
+                    GUILayout.BeginHorizontal();
+
+                    if (GUILayout.Button("Time Reset"))
+                    {
+                        seletedRun(AnmCtrUtill.TimeReset);
+                    }
+
+                    if (GUILayout.Button("Time Rnd"))
+                    {
+                        seletedRun(AnmCtrUtill.TimeRnd);
+                    }
+
+                    GUILayout.EndHorizontal();
+                }
+
+
+
+                //GUI.enabled = true;
                 GUILayout.Label("option");
 
-                all = GUILayout.SelectionGrid(all, type, 2);
-                if (all == 1)
-                {
-                    GUI.enabled = false;
-                }
+                Option = GUILayout.SelectionGrid(Option, type, 2);
+                //if (Option == 1)
+                //{
+                //    GUI.enabled = false;
+                //}
 
                 GUILayout.Label("maid select");
                 // 여기는 출력된 메이드들 이름만 가져옴
@@ -281,6 +289,50 @@ namespace COM3D2.AnmCtr.Plugin
             GUI.DragWindow(); // 창 드레그 가능하게 해줌. 마지막에만 넣어야함
         }
 
+        public void seletedRun(Action<int> action)
+        {
+            if (Option == 0)
+            {
+                action(seleted);
+            }
+            else
+            {
+                for (int i = 0; i < 18; i++)
+                {
+                    action(i);
+                }
+            }
+        }
+
+        public void seletedRun<T1>(Action<int,T1> action,T1 t1)
+        {
+            if (Option == 0)
+            {
+                action(seleted , t1);
+            }
+            else
+            {
+                for (int i = 0; i < 18; i++)
+                {
+                    action(i, t1);
+                }
+            }
+        }
+
+        public void seletedRun<T1,T2>(Action<int, T1, T2> action, T1 t1, T2 t2)
+        {
+            if (Option == 0)
+            {
+                action(seleted, t1, t2);
+            }
+            else
+            {
+                for (int i = 0; i < 18; i++)
+                {
+                    action(i, t1, t2);
+                }
+            }
+        }
 
 
 
@@ -301,7 +353,7 @@ namespace COM3D2.AnmCtr.Plugin
         public void OnDisable()
         {
 
-            AnmCtrGUI.myWindowRect.save(); 
+            AnmCtrGUI.myWindowRect.save();
             SceneManager.sceneLoaded -= this.OnSceneLoaded;
         }
 
