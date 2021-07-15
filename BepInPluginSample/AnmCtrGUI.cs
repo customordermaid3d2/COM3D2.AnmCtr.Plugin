@@ -243,6 +243,21 @@ namespace COM3D2.AnmCtr.Plugin
                     }
                 }
                 */
+                if (GUILayout.Button("Time Rnd"))
+                {
+                    if (all == 0)
+                    {
+                        AnmCtrUtill.TimeRnd(seleted);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 18; i++)
+                        {
+                            AnmCtrUtill.TimeRnd(i);
+                        }
+                    }
+                }
+                
                 GUILayout.EndHorizontal();
 
                 GUI.enabled = true;

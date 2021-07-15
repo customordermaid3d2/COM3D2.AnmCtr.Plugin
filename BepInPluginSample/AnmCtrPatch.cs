@@ -12,6 +12,7 @@ namespace COM3D2.AnmCtr.Plugin
         
         public static Maid[] maids=new Maid[18];
         public static string[] maidNames=new string[18];
+        public static string[] motionTags=new string[18];
 
         /// <summary>
         /// 메이드가 슬롯에 넣었을때 
@@ -28,8 +29,7 @@ namespace COM3D2.AnmCtr.Plugin
             {
                 // maids 의 위치랑 maidNames 의 위치가 같게끔 설정한거
                 maids[f_nActiveSlotNo] = f_maid; // 내가 만든 메이드 목록중 해당 번호 슬롯에 메이드를 저장
-                maidNames[f_nActiveSlotNo] = f_maid.status.fullNameEnStyle;
-                
+                maidNames[f_nActiveSlotNo] = f_maid.status.fullNameEnStyle;                
             }
             MyLog.LogMessage("CharacterMgr.SetActive", f_nActiveSlotNo, f_bMan, f_maid.status.fullNameEnStyle);
         }
@@ -47,6 +47,7 @@ namespace COM3D2.AnmCtr.Plugin
             {
                 maids[f_nActiveSlotNo] = null;
                 maidNames[f_nActiveSlotNo] = string.Empty;
+                motionTags[f_nActiveSlotNo] = null;
             }
             MyLog.LogMessage("CharacterMgr.Deactivate", f_nActiveSlotNo, f_bMan);
         }

@@ -23,9 +23,11 @@ namespace COM3D2.AnmCtr.Plugin
             }
 			if (0 < array.Length)
 			{
+				var tag = fileName.GetHashCode().ToString();
 				//AnmCtrPatch.maids[seleted].CrossFade(fileName, false, true, false, 0f, 1f);
-				AnmCtrPatch.maids[seleted].body0.CrossFade(fileName.GetHashCode().ToString(), array, false, true, false, 0f, 1f);
+				AnmCtrPatch.maids[seleted].body0.CrossFade(tag, array, false, true, false, 0f, 1f);
 				AnmCtrPatch.maids[seleted].GetAnimation().Play();
+				AnmCtrPatch.motionTags[seleted] = tag;
 			}           
         }
 
@@ -50,5 +52,32 @@ namespace COM3D2.AnmCtr.Plugin
 			return array;
 		}
 
-	}
+        internal static void TimeRnd(int seleted)
+        {
+			var maid = AnmCtrPatch.maids[seleted];
+			if (maid == null)
+			{
+				return;
+			}
+			// AnmCtrPatch.maids[seleted].GetAnimation().Play();
+			// AnmCtrPatch.motionNames[seleted] = fileName;
+			var tag = AnmCtrPatch.motionTags[seleted];
+            if (tag==null)
+            {
+				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
+				, "nm null"
+				);
+				return;
+            }
+			var anm= maid.GetAnimation()[tag];
+			if (anm == null)
+			{
+				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
+				, "anm null"
+				);
+				return;
+			}
+			anm.time = UnityEngine.Random.Range(0, anm.length);
+		}
+    }
 }
