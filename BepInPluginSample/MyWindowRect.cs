@@ -1,4 +1,5 @@
 ﻿using BepInEx.Configuration;
+using COM3D2.Lilly.Plugin;
 using HarmonyLib;
 using Newtonsoft.Json;
 using System;
@@ -24,21 +25,18 @@ namespace BepInPluginSample
 
         private ConfigEntry<bool> isOpen;
 
-        /// <summary>
-        /// 참이 열렸다 닫혔을때 창 위치랑 크기 조정
-        /// </summary>
         public bool IsOpen
         {
             get => isOpen.Value;
             set
             {
-                if (isOpen.Value = value)// 펼쳤을때
+                if (isOpen.Value = value)
                 {
                     windowRect.width = windowRectOpen.w;
                     windowRect.height = windowRectOpen.h;
                     windowRect.x -= windowRectOpen.w - windowRectClose.w;
                 }
-                else // 닫혔을때
+                else
                 {
                     windowRect.width = windowRectClose.w;
                     windowRect.height = windowRectClose.h;
@@ -46,6 +44,13 @@ namespace BepInPluginSample
                 }
             }
         }
+
+        private static event Action<int, int> actionScreen;
+
+
+        private static int widthbak;
+        private static int heightbak;
+
 
         struct Position
         {
@@ -57,7 +62,7 @@ namespace BepInPluginSample
                 this.x = x;
                 this.y = y;
             }
-        } // 설정파일 저장용 규격. 이게 GUI 위치값 저장
+        }
 
         struct Size
         {
@@ -88,22 +93,9 @@ namespace BepInPluginSample
         public float X { get => windowRect.x; set => windowRect.x = value; }
         public float Y { get => windowRect.y; set => windowRect.y = value; }
 
-        /// <summary>
-        /// 베핀 설정 파일 기능 이용
-        /// </summary>
-        /// <param name="config">베핀설정 파일</param>
-        /// <param name="fileName"></param>
-        /// <param name="wc"></param>
-        /// <param name="wo"></param>
-        /// <param name="hc"></param>
-        /// <param name="ho"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="windowSpace"></param>
-        public MyWindowRect(ConfigFile config, string fileName = "", float wc = 200f, float wo = 300f, float hc = 32f, float ho = 600f, float x = 32f, float y = 32f, float windowSpace = 32f)
+        public MyWindowRect(ConfigFile config, string fileName, float wc = 200f, float wo = 300f, float hc = 32f, float ho = 600f, float x = 32f, float y = 32f, float windowSpace = 32f)
         {
-            // json으로 저장될 파일명
-            jsonPath = Path.GetDirectoryName(config.ConfigFilePath) + $@"\{fileName}-windowRect.json";
+            jsonPath = Path.GetDirectoryName(config.ConfigFilePath) + $@"\{fileName}-rect.json";
 
             this.windowSpace = windowSpace;
             windowRect = new Rect(x, y, wo, ho);
@@ -115,8 +107,12 @@ namespace BepInPluginSample
             if (harmony == null)
             {
                 harmony = Harmony.CreateAndPatchAll(typeof(MyWindowRect));
+                widthbak = Screen.width;
+                heightbak = Screen.height;
             }
-            actionSave += save;// 최초 생성시 저장
+            actionSave += save;
+            actionScreen += ScreenChg;
+
         }
 
         public void load()
@@ -134,9 +130,6 @@ namespace BepInPluginSample
             windowRect.y = position.y;
         }
 
-        /// <summary>
-        /// 이게 창위치를 저장하게 해주는 함수
-        /// </summary>
         public void save()
         {
             position.x = windowRect.x;
@@ -144,11 +137,38 @@ namespace BepInPluginSample
             File.WriteAllText(jsonPath, JsonConvert.SerializeObject(position, Formatting.Indented)); // 자동 들여쓰기
         }
 
+
         [HarmonyPatch(typeof(GameMain), "LoadScene")]
         [HarmonyPostfix]
         public static void LoadScene()
         {
             actionSave();
+        }
+
+
+        public void ScreenChg(int width, int height)
+        {
+            if (windowRect.x > widthbak / 2)
+            {
+                windowRect.x += width - widthbak;
+            }
+            if (windowRect.y > heightbak / 2)
+            {
+                windowRect.y += height - heightbak;
+            }
+            //MyLog.LogMessage("SetResolution3", widthbak, heightbak, Screen.fullScreen);
+            //MyLog.LogMessage("SetResolution4", Screen.width, Screen.height, Screen.fullScreen);
+            //MyLog.LogMessage("SetResolution5", windowRect.x, windowRect.y);
+        }
+
+        [HarmonyPatch(typeof(Screen), "SetResolution", typeof(int), typeof(int), typeof(bool))]
+        [HarmonyPostfix]
+        public static void SetResolutionPost(int width, int height, bool fullscreen)
+        {
+            actionScreen(width, height);
+            widthbak = width;
+            heightbak = height;
+            //MyLog.LogMessage("SetResolution");
         }
     }
 }

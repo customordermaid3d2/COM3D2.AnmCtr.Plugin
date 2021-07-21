@@ -223,10 +223,13 @@ namespace COM3D2.AnmCtr.Plugin
                         seletedRun(AnmCtrUtill.Load, openDialog.FileName, array);
                     }
                 }
+                /*
                 if (GUILayout.Button("Copy All"))
                 {
                     AnmCtrUtill.seletedCopy(seleted);
                 }
+                */
+
                 /*
                 if (GUILayout.Button("save"))
                 {
