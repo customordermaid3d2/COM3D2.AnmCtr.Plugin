@@ -1,4 +1,4 @@
-﻿using COM3D2.Lilly.Plugin;
+﻿
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -33,7 +33,7 @@ namespace COM3D2.AnmCtr.Plugin
                 maids[f_nActiveSlotNo] = f_maid; // 내가 만든 메이드 목록중 해당 번호 슬롯에 메이드를 저장
                 maidNames[f_nActiveSlotNo] = f_maid.status.fullNameEnStyle;
             }
-            MyLog.LogMessage("CharacterMgr.SetActive", f_nActiveSlotNo, f_bMan, f_maid.status.fullNameEnStyle);
+            AnmCtr.log.LogMessage("CharacterMgr.SetActive", f_nActiveSlotNo, f_bMan, f_maid.status.fullNameEnStyle);
         }
 
         /// <summary>
@@ -51,14 +51,14 @@ namespace COM3D2.AnmCtr.Plugin
                 maidNames[f_nActiveSlotNo] = string.Empty;
                 motionTags[f_nActiveSlotNo] = null;
             }
-            MyLog.LogMessage("CharacterMgr.Deactivate", f_nActiveSlotNo, f_bMan);
+            AnmCtr.log.LogMessage("CharacterMgr.Deactivate", f_nActiveSlotNo, f_bMan);
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(TBody), "CrossFade", typeof(string), typeof(AFileSystemBase), typeof(bool), typeof(bool), typeof(bool), typeof(float), typeof(float))]
         public static void CrossFade(TBody __instance, string filename, AFileSystemBase fileSystem, bool additive = false, bool loop = false, bool boAddQue = false, float fade = 0.5f, float weight = 1f)
         {
             //if (config["CrossFade", false])
-            MyLog.LogMessage("TBody.CrossFade1"
+            AnmCtr.log.LogMessage("TBody.CrossFade1"
             , filename
             , additive
             , loop
@@ -78,7 +78,7 @@ namespace COM3D2.AnmCtr.Plugin
         public static void CrossFade(TBody __instance, string tag, byte[] byte_data, bool additive = false, bool loop = false, bool boAddQue = false, float fade = 0.5f, float weight = 1f)
         {
             //if (config["CrossFade", false])
-            MyLog.LogMessage("TBody.CrossFade2"
+            AnmCtr.log.LogMessage("TBody.CrossFade2"
             , tag
             , additive
             , loop

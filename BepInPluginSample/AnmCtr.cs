@@ -1,6 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-using COM3D2.Lilly.Plugin;
+using COM3D2.LillyUtill;
 using COM3D2API;
 using HarmonyLib;
 using Newtonsoft.Json;
@@ -15,7 +15,7 @@ using UnityEngine.SceneManagement;
 
 namespace COM3D2.AnmCtr.Plugin
 {
-    [BepInPlugin(MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_VERSION)]// 버전 규칙 잇음. 반드시 2~4개의 숫자구성으로 해야함. 미준수시 못읽어들임
+    [BepInPlugin(MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_NAME, MyAttribute.PLAGIN_VERSION)]// 버전 규칙 잇음. 반드시 2~4개의 숫자구성으로 해야함. 미준수시 못읽어들임
     //[BepInPlugin("COM3D2.Sample.Plugin", "COM3D2.Sample.Plugin", "21.6.6")]// 버전 규칙 잇음. 반드시 2~4개의 숫자구성으로 해야함. 미준수시 못읽어들임
     [BepInProcess("COM3D2x64.exe")]
     public class AnmCtr : BaseUnityPlugin
@@ -26,6 +26,7 @@ namespace COM3D2.AnmCtr.Plugin
         Harmony harmony;
 
         public static AnmCtr sample;
+        public static MyLog log=new MyLog(MyAttribute.PLAGIN_NAME);
 
         /// <summary>
         /// 0.
@@ -34,27 +35,6 @@ namespace COM3D2.AnmCtr.Plugin
         public AnmCtr()
         {
             sample = this;
-            MyLog.log = BepInEx.Logging.Logger.CreateLogSource(MyAttribute.PLAGIN_NAME);
-        }
-
-        /// <summary>
-        /// 1.
-        /// 그리고 베핀 플러그인에서 이부분을 실행
-        ///  게임 실행시 한번만 실행됨
-        ///  유니티앤진에서 사용하는 함수라서 이와 관련된건
-        ///  https://docs.unity3d.com/kr/530/Manual/ExecutionOrder.html
-        ///  를 참조하면 제일 좋음
-        /// </summary>
-        public void Awake()
-        {
-            MyLog.LogMessage("Awake");
-
-            // 단축키 기본값 설정
-            //ShowCounter = Config.Bind("KeyboardShortcut", "KeyboardShortcut0", new BepInEx.Configuration.KeyboardShortcut(KeyCode.Alpha9, KeyCode.LeftControl));
-
-            
-
-            // 기어 메뉴 추가. 이 플러그인 기능 자체를 멈추려면 enabled 를 꺽어야함. 그러면 OnEnable(), OnDisable() 이 작동함
         }
 
 
@@ -64,7 +44,7 @@ namespace COM3D2.AnmCtr.Plugin
         /// </summary>
         public void OnEnable()
         {
-            MyLog.LogMessage("OnEnable");
+            AnmCtr.log.LogMessage("OnEnable");
 
             SceneManager.sceneLoaded += this.OnSceneLoaded;
 
@@ -84,7 +64,7 @@ namespace COM3D2.AnmCtr.Plugin
         /// </summary>
         public void Start()
         {
-            MyLog.LogMessage("Start");
+            AnmCtr.log.LogMessage("Start");
 
             // 어쨋든 기본 유니티 앤진 구조는 이러함
             // 그리고 유니티 앤진 자체가 오브젝트 안에 오브젝트를 추가할수 있음
@@ -109,7 +89,7 @@ namespace COM3D2.AnmCtr.Plugin
         /// <param name="mode"></param>
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            MyLog.LogMessage("OnSceneLoaded", scene.name, scene.buildIndex);
+            AnmCtr.log.LogMessage("OnSceneLoaded", scene.name, scene.buildIndex);
             //  scene.buildIndex 는 쓰지 말자 제발
             scene_name = scene.name;
         }
@@ -165,27 +145,12 @@ namespace COM3D2.AnmCtr.Plugin
         /// </summary>
         public void OnDisable()
         {
-            MyLog.LogMessage("OnDisable");
+            AnmCtr.log.LogMessage("OnDisable");
 
             SceneManager.sceneLoaded -= this.OnSceneLoaded;
 
             harmony.UnpatchSelf();// ==harmony.UnpatchAll(harmony.Id);
             //harmony.UnpatchAll(); // 정대 사용 금지. 다름 플러그인이 패치한것까지 다 풀려버림
-        }
-
-        public void Pause()
-        {
-            MyLog.LogMessage("Pause");
-        }
-
-        public void Resume()
-        {
-            MyLog.LogMessage("Resume");
-        }
-
-        public void OnApplicationQuit()
-        {
-            MyLog.LogMessage("OnApplicationQuit");
         }
 
     }

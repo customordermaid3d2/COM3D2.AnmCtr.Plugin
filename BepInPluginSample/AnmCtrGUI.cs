@@ -1,7 +1,6 @@
 ﻿using BepInEx;
 using BepInEx.Configuration;
-using BepInPluginSample;
-using COM3D2.Lilly.Plugin;
+using COM3D2.LillyUtill;
 using COM3D2API;
 //using Ookii.Dialogs;
 using System;
@@ -31,10 +30,21 @@ namespace COM3D2.AnmCtr.Plugin
         // 위치 저장용 테스트 json
         public static MyWindowRect myWindowRect;
 
-        public static bool IsOpen
+        public bool IsOpen
         {
             get => myWindowRect.IsOpen;
-            set => myWindowRect.IsOpen = value;
+            set
+            {
+                myWindowRect.IsOpen = value;
+                if (value)
+                {
+                    windowName = FullName;
+                }
+                else
+                {
+                    windowName = ShortName;
+                }
+            }
         }
 
         // GUI ON OFF 설정파일로 저장
@@ -60,7 +70,9 @@ namespace COM3D2.AnmCtr.Plugin
 
         private int seleted;
 
-
+        public string windowName= MyAttribute.PLAGIN_NAME;
+        public string FullName= MyAttribute.PLAGIN_NAME;
+        public string ShortName="AC";
 
         /// <summary>
         /// 부모 PresetExpresetXmlLoader 앤진? 에다가 PresetExpresetXmlLoaderGUI 앤진? 를 추가 시켜줌
@@ -77,7 +89,7 @@ namespace COM3D2.AnmCtr.Plugin
             if (instance == null)
             {
                 instance = parent.AddComponent<AnmCtrGUI>();
-                MyLog.LogMessage("GUI.Install", instance.name);
+                AnmCtr.log.LogMessage("GUI.Install", instance.name);
             }
             return instance;
         }
@@ -87,7 +99,7 @@ namespace COM3D2.AnmCtr.Plugin
         /// </summary>
         public void Awake()
         {
-            MyLog.LogMessage("GUI.OnEnable");
+            AnmCtr.log.LogMessage("GUI.OnEnable");
 
             myWindowRect = new MyWindowRect(config, MyAttribute.PLAGIN_FULL_NAME);
             IsGUIOn = config.Bind("GUI", "isGUIOn", false); // 이건 베핀 설정값 지정용
@@ -129,7 +141,7 @@ namespace COM3D2.AnmCtr.Plugin
 
         public void OnEnable()
         {
-            MyLog.LogMessage("GUI.OnEnable");
+            AnmCtr.log.LogMessage("GUI.OnEnable");
 
             AnmCtrGUI.myWindowRect.load();// 이건 창 위치 설정하는건데 소스 열어서  다로 공부해볼것
             SceneManager.sceneLoaded += this.OnSceneLoaded;
@@ -137,7 +149,7 @@ namespace COM3D2.AnmCtr.Plugin
 
         public void Start()
         {
-            MyLog.LogMessage("GUI.Start");
+            AnmCtr.log.LogMessage("GUI.Start");
         }
 
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
@@ -159,7 +171,7 @@ namespace COM3D2.AnmCtr.Plugin
             if (ShowCounter.Value.IsUp())// 단축키가 일치할때
             {
                 isGUIOn = !isGUIOn;// 보이거나 안보이게. 이런 배열이였네 지웠음
-                MyLog.LogMessage("IsUp", ShowCounter.Value.MainKey);
+                AnmCtr.log.LogMessage("IsUp", ShowCounter.Value.MainKey);
             }
         }
 
@@ -185,7 +197,7 @@ namespace COM3D2.AnmCtr.Plugin
 
             GUILayout.BeginHorizontal();// 가로 정렬
             // 라벨 추가
-            GUILayout.Label(MyAttribute.PLAGIN_NAME + " " + ShowCounter.Value.ToString(), GUILayout.Height(20));
+            GUILayout.Label(windowName, GUILayout.Height(20));
             // 안쓰는 공간이 생기더라도 다른 기능으로 꽉 채우지 않고 빈공간 만들기
             GUILayout.FlexibleSpace();
 
@@ -203,7 +215,7 @@ namespace COM3D2.AnmCtr.Plugin
                 scrollPosition = GUILayout.BeginScrollView(scrollPosition);
 
                 // 메이드가 있을때만 여기 아래 기능들 클릭 가능
-                GUI.enabled = AnmCtrPatch.maids[seleted] != null;
+                //GUI.enabled = AnmCtrPatch.maids[seleted] != null;
                 if (GUI.enabled)
                 {
                     GUILayout.Label("");
@@ -280,6 +292,8 @@ namespace COM3D2.AnmCtr.Plugin
                 //    GUI.enabled = false;
                 //}
 
+                //GUI.enabled = true;
+
                 GUILayout.Label("maid select");
                 // 여기는 출력된 메이드들 이름만 가져옴
                 // seleted 가 이름 위치 번호만 가져온건데
@@ -347,7 +361,7 @@ namespace COM3D2.AnmCtr.Plugin
         public void OnApplicationQuit()
         {
             AnmCtrGUI.myWindowRect.save();
-            MyLog.LogMessage("OnApplicationQuit");
+            AnmCtr.log.LogMessage("OnApplicationQuit");
         }
 
         /// <summary>

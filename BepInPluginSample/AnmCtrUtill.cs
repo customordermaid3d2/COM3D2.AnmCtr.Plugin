@@ -1,5 +1,4 @@
 ﻿
-using COM3D2.Lilly.Plugin;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -45,7 +44,7 @@ namespace COM3D2.AnmCtr.Plugin
 			}
 			catch (Exception e)
 			{
-				MyLog.LogMessage("AnmCtrUtill.Load"
+				AnmCtr.log.LogMessage("AnmCtrUtill.Load"
 					, e.ToString()
 					);
 			}
@@ -57,7 +56,7 @@ namespace COM3D2.AnmCtr.Plugin
 			AnimationState anm = GetAnm(seleted);
 			if (anm == null)
 			{
-				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
+				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd"
 				, "anm null"
 				);
 				return;
@@ -70,7 +69,7 @@ namespace COM3D2.AnmCtr.Plugin
 			AnimationState anm = GetAnm(seleted);
 			if (anm == null)
 			{
-				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
+				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd"
 				, "anm null"
 				);
 				return;
@@ -90,7 +89,7 @@ namespace COM3D2.AnmCtr.Plugin
 			var tag = AnmCtrPatch.motionTags[seleted];
 			if (tag == null)
 			{
-				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
+				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd"
 				, "nm null"
 				);
 				return null;
@@ -98,7 +97,7 @@ namespace COM3D2.AnmCtr.Plugin
 			AnimationState anm = maid.GetAnimation()[tag];
 			if (anm == null)
 			{
-				MyLog.LogMessage("AnmCtrUtill.TimeRnd"
+				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd"
 				, "anm null"
 				);
 				return null;
@@ -116,7 +115,7 @@ namespace COM3D2.AnmCtr.Plugin
 			AnimationState anm = GetAnm(seleted);
 			if (anm == null)
 			{
-				MyLog.LogMessage("AnmCtrUtill.seletedCopy"
+				AnmCtr.log.LogMessage("AnmCtrUtill.seletedCopy"
 				, "anm null"
 				);
 				return;
@@ -150,7 +149,7 @@ namespace COM3D2.AnmCtr.Plugin
 				anm.time = 0f;
 				anm.weight = 0f;
 				anm.enabled = true;
-				MyLog.LogMessage("AnmCtrUtill.seletedCopy"
+				AnmCtr.log.LogMessage("AnmCtrUtill.seletedCopy"
 				, maid.status.fullNameEnStyle
 				);
 			}
