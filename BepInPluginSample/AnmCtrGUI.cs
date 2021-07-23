@@ -36,14 +36,14 @@ namespace COM3D2.AnmCtr.Plugin
             set
             {
                 myWindowRect.IsOpen = value;
-                if (value)
-                {
-                    windowName = FullName;
-                }
-                else
-                {
-                    windowName = ShortName;
-                }
+               //if (value)
+               //{
+               //    windowName = FullName;
+               //}
+               //else
+               //{
+               //    windowName = ShortName;
+               //}
             }
         }
 
@@ -70,9 +70,9 @@ namespace COM3D2.AnmCtr.Plugin
 
         private int seleted;
 
-        public string windowName= MyAttribute.PLAGIN_NAME;
-        public string FullName= MyAttribute.PLAGIN_NAME;
-        public string ShortName="AC";
+       // public string windowName= MyAttribute.PLAGIN_NAME;
+       // public string FullName= MyAttribute.PLAGIN_NAME;
+       // public string ShortName="AC";
 
         /// <summary>
         /// 부모 PresetExpresetXmlLoader 앤진? 에다가 PresetExpresetXmlLoaderGUI 앤진? 를 추가 시켜줌
@@ -101,7 +101,7 @@ namespace COM3D2.AnmCtr.Plugin
         {
             AnmCtr.log.LogMessage("GUI.OnEnable");
 
-            myWindowRect = new MyWindowRect(config, MyAttribute.PLAGIN_FULL_NAME);
+            myWindowRect = new MyWindowRect(config, MyAttribute.PLAGIN_NAME, MyAttribute.PLAGIN_NAME,"AC");
             IsGUIOn = config.Bind("GUI", "isGUIOn", false); // 이건 베핀 설정값 지정용
             option = config.Bind("GUI", "all", 0); // 이건 베핀 설정값 지정용
             // 이건 단축키
@@ -197,7 +197,7 @@ namespace COM3D2.AnmCtr.Plugin
 
             GUILayout.BeginHorizontal();// 가로 정렬
             // 라벨 추가
-            GUILayout.Label(windowName, GUILayout.Height(20));
+            GUILayout.Label(myWindowRect.windowName, GUILayout.Height(20));
             // 안쓰는 공간이 생기더라도 다른 기능으로 꽉 채우지 않고 빈공간 만들기
             GUILayout.FlexibleSpace();
 
