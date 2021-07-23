@@ -294,11 +294,11 @@ namespace COM3D2.AnmCtr.Plugin
 
                 //GUI.enabled = true;
 
-                GUILayout.Label("maid select");
+                
                 // 여기는 출력된 메이드들 이름만 가져옴
                 // seleted 가 이름 위치 번호만 가져온건데
-                seleted = GUILayout.SelectionGrid(seleted, AnmCtrPatch.maidNames, 1);
-
+                //seleted = GUILayout.SelectionGrid(seleted, AnmCtrPatch.maidNames, 1);
+                seleted = MaidActivePatch.SelectionGrid (seleted,3,false) ;
 
                 GUILayout.EndScrollView();
             }
