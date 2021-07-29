@@ -59,21 +59,21 @@ namespace COM3D2.AnmCtr.Plugin
                 //maidNames[f_nActiveSlotNo] = string.Empty;
                 motionTags[f_nActiveSlotNo] = null;
             }
-            AnmCtr.log.LogMessage("CharacterMgr.Deactivate", f_nActiveSlotNo, f_bMan);
+            //AnmCtr.log.LogMessage("CharacterMgr.Deactivate", f_nActiveSlotNo, f_bMan);
         }
 
         [HarmonyPostfix, HarmonyPatch(typeof(TBody), "CrossFade", typeof(string), typeof(AFileSystemBase), typeof(bool), typeof(bool), typeof(bool), typeof(float), typeof(float))]
         public static void CrossFade(TBody __instance, string filename, AFileSystemBase fileSystem, bool additive = false, bool loop = false, bool boAddQue = false, float fade = 0.5f, float weight = 1f)
         {
             //if (config["CrossFade", false])
-            AnmCtr.log.LogMessage("TBody.CrossFade1"
-            , filename
-            , additive
-            , loop
-            , boAddQue
-            , fade
-            , weight
-            );
+            //AnmCtr.log.LogMessage("TBody.CrossFade1"
+            //, filename
+            //, additive
+            //, loop
+            //, boAddQue
+            //, fade
+            //, weight
+            //);
             int i = MaidActivePatch.maids.ToList().IndexOf(__instance.maid);
             if (i >= 0&& motionTags.Length > i)
             {
@@ -86,14 +86,14 @@ namespace COM3D2.AnmCtr.Plugin
         public static void CrossFade(TBody __instance, string tag, byte[] byte_data, bool additive = false, bool loop = false, bool boAddQue = false, float fade = 0.5f, float weight = 1f)
         {
             //if (config["CrossFade", false])
-            AnmCtr.log.LogMessage("TBody.CrossFade2"
-            , tag
-            , additive
-            , loop
-            , boAddQue
-            , fade
-            , weight
-            );
+            //AnmCtr.log.LogMessage("TBody.CrossFade2"
+            //, tag
+            //, additive
+            //, loop
+            //, boAddQue
+            //, fade
+            //, weight
+            //);
             int i = MaidActivePatch.maids.ToList().IndexOf(__instance.maid);
             if (i >= 0 && motionTags.Length > i)
             {
