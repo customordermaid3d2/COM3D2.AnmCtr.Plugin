@@ -1,4 +1,5 @@
 ﻿
+using COM3D2.LillyUtill;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,7 @@ namespace COM3D2.AnmCtr.Plugin
 
         internal static void Load(int seleted, string fileName, byte[] array)
         {
-            if (AnmCtrPatch.maids[seleted]==null)
+            if (MaidActivePatch.maids[seleted]==null)
             {
 				return;
             }
@@ -24,8 +25,8 @@ namespace COM3D2.AnmCtr.Plugin
 			{
 				var tag = fileName.GetHashCode().ToString();
 				//AnmCtrPatch.maids[seleted].CrossFade(fileName, false, true, false, 0f, 1f);
-				AnmCtrPatch.maids[seleted].body0.CrossFade(tag, array, false, true, false, 0f, 1f);
-				AnmCtrPatch.maids[seleted].GetAnimation().Play();
+				MaidActivePatch.maids[seleted].body0.CrossFade(tag, array, false, true, false, 0f, 1f);
+				MaidActivePatch.maids[seleted].GetAnimation().Play();
 				AnmCtrPatch.motionTags[seleted] = tag;
 			}           
         }
@@ -79,7 +80,7 @@ namespace COM3D2.AnmCtr.Plugin
 
 		internal static AnimationState GetAnm(int seleted)
         {
-			var maid = AnmCtrPatch.maids[seleted];
+			var maid = MaidActivePatch.maids[seleted];
 			if (maid == null)
 			{
 				return null;
@@ -122,14 +123,14 @@ namespace COM3D2.AnmCtr.Plugin
 			}
 			//AnmCtrPatch.motionTags[seleted];
 
-			Animation animation = AnmCtrPatch.maids[seleted].GetAnimation();
+			Animation animation = MaidActivePatch.maids[seleted].GetAnimation();
 			AnimationClip clip = animation.GetClip(AnmCtrPatch.motionTags[seleted]);
 			Maid maid;
 			var tag = AnmCtrPatch.motionTags[seleted];
 
 			for (int i = 0; i < 18; i++)
 			{
-				maid = AnmCtrPatch.maids[i];
+				maid = MaidActivePatch.maids[i];
 				if (maid == null)
 				{
 					continue;

@@ -52,6 +52,8 @@ namespace COM3D2.AnmCtr.Plugin
             // 이게 게임 원래 메소들을 해킹해서 값을 바꿔주게 해주는 역활
             harmony = Harmony.CreateAndPatchAll(typeof(AnmCtrPatch));
 
+            MaidActivePatch.maidCntChg += AnmCtrPatch.maidCntChg;
+
         }
 
         /// <summary>

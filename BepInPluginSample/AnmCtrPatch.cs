@@ -1,4 +1,5 @@
 ﻿
+using COM3D2.LillyUtill;
 using HarmonyLib;
 using System;
 using System.Collections.Generic;
@@ -11,11 +12,12 @@ namespace COM3D2.AnmCtr.Plugin
     class AnmCtrPatch
     {
 
-        public static Maid[] maids = new Maid[18];
-        public static string[] maidNames = new string[18];
+        //public static Maid[] maids = new Maid[18];
+        //public static string[] maidNames = new string[18];
         public static string[] motionTags = new string[18];
         //public static AnimationClip[] animationClips = new AnimationClip[18];
 
+        /*
         /// <summary>
         /// 메이드가 슬롯에 넣었을때 
         /// 
@@ -35,6 +37,12 @@ namespace COM3D2.AnmCtr.Plugin
             }
             AnmCtr.log.LogMessage("CharacterMgr.SetActive", f_nActiveSlotNo, f_bMan, f_maid.status.fullNameEnStyle);
         }
+        */
+
+        public static void maidCntChg(int slot)
+        {
+            Array.Resize(ref motionTags, slot);            
+        }
 
         /// <summary>
         /// 메이드가 슬롯에서 빠졌을때
@@ -45,10 +53,10 @@ namespace COM3D2.AnmCtr.Plugin
         [HarmonyPrefix] // CharacterMgr의 SetActive가 실행 전에 아래 메소드 작동
         public static void Deactivate(int f_nActiveSlotNo, bool f_bMan)
         {
-            if (!f_bMan)
+            if (!f_bMan&& motionTags.Length> f_nActiveSlotNo)
             {
-                maids[f_nActiveSlotNo] = null;
-                maidNames[f_nActiveSlotNo] = string.Empty;
+                //maids[f_nActiveSlotNo] = null;
+                //maidNames[f_nActiveSlotNo] = string.Empty;
                 motionTags[f_nActiveSlotNo] = null;
             }
             AnmCtr.log.LogMessage("CharacterMgr.Deactivate", f_nActiveSlotNo, f_bMan);
@@ -66,8 +74,8 @@ namespace COM3D2.AnmCtr.Plugin
             , fade
             , weight
             );
-            int i = maids.ToList().IndexOf(__instance.maid);
-            if (i >= 0)
+            int i = MaidActivePatch.maids.ToList().IndexOf(__instance.maid);
+            if (i >= 0&& motionTags.Length > i)
             {
                 motionTags[i] = filename;
             }
@@ -86,8 +94,8 @@ namespace COM3D2.AnmCtr.Plugin
             , fade
             , weight
             );
-            int i = maids.ToList().IndexOf(__instance.maid);
-            if (i >= 0)
+            int i = MaidActivePatch.maids.ToList().IndexOf(__instance.maid);
+            if (i >= 0 && motionTags.Length > i)
             {
                 motionTags[i] = tag;
             }
