@@ -144,7 +144,7 @@ namespace COM3D2.AnmCtr.Plugin
             AnmCtr.log.LogMessage("GUI.OnEnable");
 
             AnmCtrGUI.myWindowRect.load();// 이건 창 위치 설정하는건데 소스 열어서  다로 공부해볼것
-            SceneManager.sceneLoaded += this.OnSceneLoaded;
+            //SceneManager.sceneLoaded += this.OnSceneLoaded;
         }
 
         public void Start()
@@ -152,10 +152,12 @@ namespace COM3D2.AnmCtr.Plugin
             AnmCtr.log.LogMessage("GUI.Start");
         }
 
+        /*
         public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
             AnmCtrGUI.myWindowRect.save();// 장면 이동시 GUI 창 위치 저장
         }
+        */
 
         private void Update()
         {
@@ -353,6 +355,7 @@ namespace COM3D2.AnmCtr.Plugin
 
 
 
+        /*
 
 
         /// <summary>
@@ -363,7 +366,6 @@ namespace COM3D2.AnmCtr.Plugin
             AnmCtrGUI.myWindowRect.save();
             AnmCtr.log.LogMessage("OnApplicationQuit");
         }
-
         /// <summary>
         /// 게임 종료시에도 호출됨
         /// </summary>
@@ -373,6 +375,6 @@ namespace COM3D2.AnmCtr.Plugin
             AnmCtrGUI.myWindowRect.save();
             SceneManager.sceneLoaded -= this.OnSceneLoaded;
         }
-
+        */
     }
 }

@@ -46,7 +46,7 @@ namespace COM3D2.AnmCtr.Plugin
         {
             AnmCtr.log.LogMessage("OnEnable");
 
-            SceneManager.sceneLoaded += this.OnSceneLoaded;
+            //SceneManager.sceneLoaded += this.OnSceneLoaded;
 
             // 하모니 패치
             // 이게 게임 원래 메소들을 해킹해서 값을 바꿔주게 해주는 역활
@@ -77,7 +77,7 @@ namespace COM3D2.AnmCtr.Plugin
             //SystemShortcutAPI.AddButton(MyAttribute.PLAGIN_FULL_NAME, new Action(delegate () { enabled = !enabled; }), MyAttribute.PLAGIN_NAME, MyUtill.ExtractResource(COM3D2.PresetExpresetXmlLoader.Plugin.Properties.Resources.icon));
         }
 
-        public string scene_name = string.Empty;
+        //public string scene_name = string.Empty;
 
         /// <summary>
         /// 이건 장면이 바귀었을때마다 작동할 코드 작성
@@ -89,23 +89,23 @@ namespace COM3D2.AnmCtr.Plugin
         /// </summary>
         /// <param name="scene"></param>
         /// <param name="mode"></param>
-        public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
-        {
-            AnmCtr.log.LogMessage("OnSceneLoaded", scene.name, scene.buildIndex);
-            //  scene.buildIndex 는 쓰지 말자 제발
-            scene_name = scene.name;
-        }
+        //public void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        //{
+        //    AnmCtr.log.LogMessage("OnSceneLoaded", scene.name, scene.buildIndex);
+        //    //  scene.buildIndex 는 쓰지 말자 제발
+        //    scene_name = scene.name;
+        //}
 
-        public void FixedUpdate()
-        {
-
-        }
+      // public void FixedUpdate()
+      // {
+      //
+      // }
 
         /// <summary>
         /// 여기는 게임 로직 부분
         /// </summary>
-        public void Update()
-        {
+        //public void Update()
+        //{
             //if (ShowCounter.Value.IsDown())
             //{
             //    MyLog.LogMessage("IsDown", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
@@ -118,15 +118,15 @@ namespace COM3D2.AnmCtr.Plugin
             //{
             //    MyLog.LogMessage("IsUp", ShowCounter.Value.Modifiers, ShowCounter.Value.MainKey);
             //}
-        }
+       // }
 
         /// <summary>
         /// 여기도 마찬가지
         /// </summary>
-        public void LateUpdate()
-        {
-
-        }
+        //public void LateUpdate()
+        //{
+        //
+        //}
 
         
         /// <summary>
@@ -134,10 +134,10 @@ namespace COM3D2.AnmCtr.Plugin
         /// 지금 이 플러그인은 약간 특이하게 다른족에서 GUI 불러들임
         /// 자세한건 위에 다시 설명해줌
         /// </summary>
-        public void OnGUI()
-        {
-          
-        }
+       //public void OnGUI()
+       //{
+       //  
+       //}
 
 
         /// <summary>
@@ -149,7 +149,7 @@ namespace COM3D2.AnmCtr.Plugin
         {
             AnmCtr.log.LogMessage("OnDisable");
 
-            SceneManager.sceneLoaded -= this.OnSceneLoaded;
+           // SceneManager.sceneLoaded -= this.OnSceneLoaded;
 
             harmony.UnpatchSelf();// ==harmony.UnpatchAll(harmony.Id);
             //harmony.UnpatchAll(); // 정대 사용 금지. 다름 플러그인이 패치한것까지 다 풀려버림
