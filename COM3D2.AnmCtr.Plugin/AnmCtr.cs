@@ -50,16 +50,14 @@ namespace COM3D2.AnmCtr.Plugin
             set => option.Value = value;
         }
 
-        public AnmCtr()
-        {            
-            log = Logger;
-        }
-
         public void Awake()
         {
-            AnmCtr.log.LogMessage("GUI.OnEnable");
+            log = Logger;
 
-            myWindowRect = new WindowRectUtill(Config, MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_NAME, "AC2");
+            AnmCtr.log.LogMessage("Awake");
+            AnmCtr.log.LogMessage("https://github.com/customordermaid3d2/COM3D2.AnmCtr.Plugin");
+
+            myWindowRect = new WindowRectUtill(Config, log, MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_NAME, "AC2");
             option = Config.Bind("GUI", "all", 0); // 이건 베핀 설정값 지정용
 
             // 파일 열기창 설정 부분. 이런건 구글링 하기
@@ -68,14 +66,14 @@ namespace COM3D2.AnmCtr.Plugin
                 // 기본 확장자
                 DefaultExt = "anm",
                 // 기본 디렉토리
-                InitialDirectory = Path.Combine(GameMain.Instance.SerializeStorageManager.StoreDirectoryPath, @"PhotoModeData\MyPose"),
+                InitialDirectory = Path.Combine(UTY.gameProjectPath, @"PhotoModeData\MyPose"),
                 // 선택 가능 확장자
                 Filter = "anm files (*.anm)|*.anm|All files (*.*)|*.*"
             };
             saveDialog = new System.Windows.Forms.SaveFileDialog()
             {
                 DefaultExt = "anm",
-                InitialDirectory = Path.Combine(GameMain.Instance.SerializeStorageManager.StoreDirectoryPath, @"PhotoModeData\MyPose"),
+                InitialDirectory = Path.Combine(UTY.gameProjectPath, @"PhotoModeData\MyPose"),
                 Filter = "anm files (*.anm)|*.anm|All files (*.*)|*.*"
             };
         }
