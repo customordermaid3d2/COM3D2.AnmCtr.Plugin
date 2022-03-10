@@ -77,11 +77,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyAttribute.cs" />
     <Compile Include="AnmCtrUtill.cs" />
     <Compile Include="AnmCtr.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="AnmCtrGUI.cs" />
     <Compile Include="AnmCtrPatch.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

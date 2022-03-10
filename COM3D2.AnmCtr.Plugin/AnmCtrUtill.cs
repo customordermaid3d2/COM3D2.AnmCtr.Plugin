@@ -1,6 +1,5 @@
-﻿
-using COM3D2.LillyUtill;
-using HarmonyLib;
+﻿using HarmonyLib;
+using LillyUtill.MyMaidActive;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,7 +16,7 @@ namespace COM3D2.AnmCtr.Plugin
 
         internal static void Load(int seleted, string fileName, byte[] array)
         {
-            if (MaidActivePatch.maids[seleted]==null)
+            if (MaidActiveUtill.maids[seleted]==null)
             {
 				return;
             }
@@ -25,8 +24,8 @@ namespace COM3D2.AnmCtr.Plugin
 			{
 				var tag = fileName.GetHashCode().ToString();
 				//AnmCtrPatch.maids[seleted].CrossFade(fileName, false, true, false, 0f, 1f);
-				MaidActivePatch.maids[seleted].body0.CrossFade(tag, array, false, true, false, 0f, 1f);
-				MaidActivePatch.maids[seleted].GetAnimation().Play();
+				MaidActiveUtill.maids[seleted].body0.CrossFade(tag, array, false, true, false, 0f, 1f);
+				MaidActiveUtill.maids[seleted].GetAnimation().Play();
 				AnmCtrPatch.motionTags[seleted] = tag;
 			}           
         }
@@ -45,8 +44,7 @@ namespace COM3D2.AnmCtr.Plugin
 			}
 			catch (Exception e)
 			{
-				AnmCtr.log.LogMessage("AnmCtrUtill.Load"
-					, e.ToString()
+				AnmCtr.log.LogMessage($"AnmCtrUtill.Load {e}"
 					);
 			}
 			return array;
@@ -57,8 +55,7 @@ namespace COM3D2.AnmCtr.Plugin
 			AnimationState anm = GetAnm(seleted);
 			if (anm == null)
 			{
-				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd"
-				, "anm null"
+				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd anm null"
 				);
 				return;
 			}
@@ -70,8 +67,7 @@ namespace COM3D2.AnmCtr.Plugin
 			AnimationState anm = GetAnm(seleted);
 			if (anm == null)
 			{
-				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd"
-				, "anm null"
+				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd anm null"
 				);
 				return;
 			}
@@ -80,7 +76,7 @@ namespace COM3D2.AnmCtr.Plugin
 
 		internal static AnimationState GetAnm(int seleted)
         {
-			var maid = MaidActivePatch.maids[seleted];
+			var maid = MaidActiveUtill.maids[seleted];
 			if (maid == null)
 			{
 				return null;
@@ -91,7 +87,7 @@ namespace COM3D2.AnmCtr.Plugin
 			if (tag == null)
 			{
 				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd"
-				, "nm null"
+				+ " anm null"
 				);
 				return null;
 			}
@@ -99,7 +95,7 @@ namespace COM3D2.AnmCtr.Plugin
 			if (anm == null)
 			{
 				AnmCtr.log.LogMessage("AnmCtrUtill.TimeRnd"
-				, "anm null"
+				+ " anm null"
 				);
 				return null;
 			}
@@ -117,20 +113,20 @@ namespace COM3D2.AnmCtr.Plugin
 			if (anm == null)
 			{
 				AnmCtr.log.LogMessage("AnmCtrUtill.seletedCopy"
-				, "anm null"
+				+ " anm null"
 				);
 				return;
 			}
 			//AnmCtrPatch.motionTags[seleted];
 
-			Animation animation = MaidActivePatch.maids[seleted].GetAnimation();
+			Animation animation = MaidActiveUtill.maids[seleted].GetAnimation();
 			AnimationClip clip = animation.GetClip(AnmCtrPatch.motionTags[seleted]);
 			Maid maid;
 			var tag = AnmCtrPatch.motionTags[seleted];
 
 			for (int i = 0; i < 18; i++)
 			{
-				maid = MaidActivePatch.maids[i];
+				maid = MaidActiveUtill.maids[i];
 				if (maid == null)
 				{
 					continue;
@@ -150,8 +146,8 @@ namespace COM3D2.AnmCtr.Plugin
 				anm.time = 0f;
 				anm.weight = 0f;
 				anm.enabled = true;
-				AnmCtr.log.LogMessage("AnmCtrUtill.seletedCopy"
-				, maid.status.fullNameEnStyle
+				AnmCtr.log.LogMessage($"AnmCtrUtill.seletedCopy {maid.status.fullNameEnStyle}"
+
 				);
 			}
 
