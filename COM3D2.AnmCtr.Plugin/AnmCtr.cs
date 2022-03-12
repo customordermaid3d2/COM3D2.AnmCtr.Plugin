@@ -19,7 +19,7 @@ namespace COM3D2.AnmCtr.Plugin
     class MyAttribute
     {
         public const string PLAGIN_NAME = "AnmCtr";
-        public const string PLAGIN_VERSION = "22.3.10";
+        public const string PLAGIN_VERSION = "22.3.12";
         public const string PLAGIN_FULL_NAME = "COM3D2.AnmCtr.Plugin";
     }
 
@@ -57,7 +57,7 @@ namespace COM3D2.AnmCtr.Plugin
             AnmCtr.log.LogMessage("Awake");
             AnmCtr.log.LogMessage("https://github.com/customordermaid3d2/COM3D2.AnmCtr.Plugin");
 
-            myWindowRect = new WindowRectUtill(Config, log, MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_NAME, "AC2");
+            myWindowRect = WindowRectUtill.Create(Config, log, MyAttribute.PLAGIN_FULL_NAME, MyAttribute.PLAGIN_NAME, "AC");
             option = Config.Bind("GUI", "all", 0); // 이건 베핀 설정값 지정용
 
             // 파일 열기창 설정 부분. 이런건 구글링 하기

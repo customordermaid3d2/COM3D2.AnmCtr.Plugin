@@ -16,7 +16,8 @@ namespace COM3D2.AnmCtr.Plugin
 
         internal static void Load(int seleted, string fileName, byte[] array)
         {
-            if (MaidActiveUtill.maids[seleted]==null)
+			Maid maid = MaidActiveUtill.GetMaid(seleted);
+			if (maid == null)
             {
 				return;
             }
@@ -24,8 +25,8 @@ namespace COM3D2.AnmCtr.Plugin
 			{
 				var tag = fileName.GetHashCode().ToString();
 				//AnmCtrPatch.maids[seleted].CrossFade(fileName, false, true, false, 0f, 1f);
-				MaidActiveUtill.maids[seleted].body0.CrossFade(tag, array, false, true, false, 0f, 1f);
-				MaidActiveUtill.maids[seleted].GetAnimation().Play();
+				maid.body0.CrossFade(tag, array, false, true, false, 0f, 1f);
+				maid.GetAnimation().Play();
 				AnmCtrPatch.motionTags[seleted] = tag;
 			}           
         }
