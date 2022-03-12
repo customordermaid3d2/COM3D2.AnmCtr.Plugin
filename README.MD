@@ -1,3 +1,6 @@
+https://user-images.githubusercontent.com/20321215/158023339-b762dce4-e5c5-4895-8292-3069c268720d.mp4
+
+
 # 설치 위치
 
 COM3D2\BepInEx\plugins
